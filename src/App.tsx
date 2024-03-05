@@ -2,6 +2,7 @@ import { useState } from "react";
 import {Step} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
 import { Box } from "@mui/material";
+import NewDataForm from "./components/NewDataForm/NewDataForm";
 
 const tmpData: Step[] = [
   {
@@ -34,12 +35,18 @@ function App() {
     setEntryData(updatedData)
   }
 
+  const addStep = (step: Step) => {
+    setEntryData((prevData) => [...prevData, step])
+  }
+
   return (
     <Box 
     className="App"
-    display='flex'
-    p={5}>
+    display='flex-col'
+    gap={4}
+    p={2}>
       <EntryDataTable data={entryData} onClick={deleteStep}/>
+      <NewDataForm steps={entryData} addData={addData}/>
     </Box>
   );
 }

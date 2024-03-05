@@ -35,13 +35,13 @@ const EntryDataTable = ({data, onClick}: Props) => {
   return (
     <TableContainer 
     component={Paper}
-    sx={{maxWidth: 700, maxHeight: 500}}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+    sx={{maxWidth: 600, maxHeight: 500}}>
+      <Table sx={{ minWidth: 600 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align='center'>Czynnosc</TableCell>
             <TableCell align="center">Czas</TableCell>
-            <TableCell align="center">Czynnosc bezposrednio poprzedzajaca</TableCell>
+            <TableCell align="center">Czynnosc bezposrednio <br/> poprzedzajaca</TableCell>
             <TableCell align="center">Usun</TableCell>
           </TableRow>
         </TableHead>
