@@ -3,6 +3,7 @@ import {Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
 import { Box } from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
+import {findStartActivity} from './utils/utils'
 
 const tmpData: Task[] = [
   {
@@ -23,8 +24,9 @@ const tmpData: Task[] = [
     startActivity: 3,
     endActivity: 4
   },
-  {id: 'D',
-  time: 6,
+  {
+    id: 'D',
+    time: 6,
     startActivity: 4,
     endActivity: 5
   }
@@ -49,8 +51,9 @@ function App() {
     display='flex-col'
     gap={4}
     p={2}>
+      {findStartActivity(entryData).error}
       <EntryDataTable data={entryData} onClick={deleteStep}/>
-      <NewDataForm steps={entryData} onSubmit={addStep}/>
+      <NewDataForm onSubmit={addStep}/>
     </Box>
   );
 }
