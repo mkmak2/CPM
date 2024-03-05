@@ -1,41 +1,45 @@
 import { useState } from "react";
-import {Step} from '../types/types'
+import {Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
 import { Box } from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
 
-const tmpData: Step[] = [
+const tmpData: Task[] = [
   {
     id: 'A',
     time: 5,
-    connected: null
+    startActivity: 1,
+    endActivity: 2
   },
   {
     id: 'B',
     time: 3,
-    connected: ['A']
+    startActivity: 2,
+    endActivity: 3
   },
   {
     id: 'C',
     time: 4,
-    connected: ['B']
+    startActivity: 3,
+    endActivity: 4
   },
   {id: 'D',
   time: 6,
-  connected: ['B', 'C']  
+    startActivity: 4,
+    endActivity: 5
   }
 ]
 
 function App() {
 
-  const [entryData, setEntryData] = useState<Step[]>(tmpData)
+  const [entryData, setEntryData] = useState<Task[]>(tmpData)
   
   const deleteStep = (id: string) => {
     const updatedData = entryData.filter( d => d.id !== id)
     setEntryData(updatedData)
   }
 
-  const addStep = (step: Step) => {
+  const addStep = (step: Task) => {
     setEntryData((prevData) => [...prevData, step])
   }
 
@@ -46,7 +50,7 @@ function App() {
     gap={4}
     p={2}>
       <EntryDataTable data={entryData} onClick={deleteStep}/>
-      <NewDataForm steps={entryData} addData={addData}/>
+      <NewDataForm steps={entryData} onSubmit={addStep}/>
     </Box>
   );
 }

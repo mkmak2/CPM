@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import Box from '@mui/material/Box'
 import { TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material'
 import ConnectedActivity from './ConnectedActivity'
-import { Step } from '../../../types/types'
+import { Task } from '../../../types/types'
 
 interface Props {
-  steps: Step[],
-  onSubmit: (step: Step) => void
+  steps: Task[],
+  onSubmit: (step: Task) => void
 }
 
 const NewDataForm = ({steps, onSubmit}: Props) => {
 
-  const [stepData, setStepData] = useState<Step>({id: '', time: 0, connected: []})
+  const [stepData, setStepData] = useState<Task>({id: '', time: 0, startActivity: 0, endActivity:0})
 
   const handleChange = (e: any) => {
     const {name, value} = e.target
@@ -23,12 +23,15 @@ const NewDataForm = ({steps, onSubmit}: Props) => {
       return 0
     if(stepData.time === 0)
       return 0
+
+    return 1;
   }
 
   const addActivity = (e: any) => {
-    console.log('hej')
+    console.log("hej")
     if(validation())
     onSubmit(stepData)
+
   }
 
   return (
@@ -66,7 +69,7 @@ const NewDataForm = ({steps, onSubmit}: Props) => {
       mt={5}>
         {steps.length ? (
         <FormControl variant="standard" sx={{ minWidth: 200 }}>
-          <InputLabel id="demo-simple-select-label">Czynnosc poprzedzajaca</InputLabel>
+          <InputLabel id="demo-simple-select-label">Zdarzenie początkowe</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
@@ -76,6 +79,7 @@ const NewDataForm = ({steps, onSubmit}: Props) => {
                 <MenuItem value={s.id}>{s.id}</MenuItem>
               ))}
           </Select>
+
         </FormControl>
           ): ( 
             <FormControl variant="standard" sx={{ minWidth: 200 }}>
@@ -88,6 +92,9 @@ const NewDataForm = ({steps, onSubmit}: Props) => {
             </Select>
           </FormControl>
         )}
+
+
+
         <Box
         display='flex'
         gap={2}

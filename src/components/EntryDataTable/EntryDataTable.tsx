@@ -7,10 +7,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
-import { Step } from '../../../types/types';
+import { Task } from '../../../types/types';
 
 interface Props {
-    data: Step[],
+    data: Task[],
     onClick: (id: string) => void
 }
 const EntryDataTable = ({data, onClick}: Props) => {
@@ -24,7 +24,7 @@ const EntryDataTable = ({data, onClick}: Props) => {
                 {e.id}
             </TableCell>
             <TableCell align="center">{e.time}</TableCell>
-            <TableCell align="center">{e.connected}</TableCell>
+            <TableCell align="center">{e.startActivity}-{e.endActivity}</TableCell>
             <TableCell align="center">
               <Button variant="contained" 
               onClick={() => onClick(e.id)}>Usun</Button>
@@ -41,7 +41,8 @@ const EntryDataTable = ({data, onClick}: Props) => {
           <TableRow>
             <TableCell align='center'>Czynnosc</TableCell>
             <TableCell align="center">Czas</TableCell>
-            <TableCell align="center">Czynnosc bezposrednio <br/> poprzedzajaca</TableCell>
+            <TableCell align="center">Następstwo<br/> zdarzeń</TableCell>
+
             <TableCell align="center">Usun</TableCell>
           </TableRow>
         </TableHead>
