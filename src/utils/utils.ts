@@ -94,10 +94,20 @@ export const isDuplicate = (tasks: Task[], task: Task):boolean =>{
 
 export const calculateES = (activities: Activity[])=>{
     activities.forEach((value)=>{
-        if(value.id===0){
+        if(value.id===1){
             value.ES=0
             value.EF=0;
         }
+        else
+        {
+            value.ES = 0;
+            for(let i=0; i<value.connected.length; i++) {
+                let max = activities[value.connected[i].startActivity - 1].ES + value.connected[i].time;
+                value.ES = Math.max(value.ES, max);
+            }
+        }
+
+
 
     })
 }
