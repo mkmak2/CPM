@@ -1,4 +1,4 @@
-import {Task} from '../../types/types'
+import {Activity, Task} from '../../types/types'
 
 export const findStartActivity = (tasks: Task[]) => {
     //wyszukanie zdarzenia, ktore wsytepuje jedynie jako poczatkowe w czynnosciach
@@ -77,4 +77,27 @@ export const findStartActivity = (tasks: Task[]) => {
         }
 
         return result
+}
+
+export const isDuplicate = (tasks: Task[], task: Task):boolean =>{
+    let result=false;
+    tasks.forEach((value)=>{
+        if(task.startActivity===value.startActivity && task.endActivity===value.endActivity){
+            result = true;
+        }
+        return;
+
+    })
+
+    return result;
+}
+
+export const calculateES = (activities: Activity[])=>{
+    activities.forEach((value)=>{
+        if(value.id===0){
+            value.ES=0
+            value.EF=0;
+        }
+
+    })
 }

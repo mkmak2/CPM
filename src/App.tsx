@@ -3,7 +3,7 @@ import {Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
 import { Box } from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
-import {findStartActivity} from './utils/utils'
+import {findStartActivity, isDuplicate} from './utils/utils'
 
 const tmpData: Task[] = [
   {
@@ -42,7 +42,10 @@ function App() {
   }
 
   const addStep = (step: Task) => {
-    setEntryData((prevData) => [...prevData, step])
+    if(isDuplicate(entryData,step))
+      return;
+    else
+      setEntryData((prevData) => [...prevData, step])
   }
 
   return (
