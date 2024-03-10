@@ -51,7 +51,11 @@ function App() {
     display='flex-col'
     gap={4}
     p={2}>
-      {findStartActivity(entryData).error}
+        <Box color='red' mb={2}>
+          <span>
+            {findStartActivity(entryData).error}
+          </span>
+        </Box>
       <EntryDataTable data={entryData} onClick={deleteStep}/>
       <NewDataForm onSubmit={addStep}/>
     </Box>
