@@ -1,9 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {Activity, Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
-import { Box } from "@mui/material";
+import {Box, Button} from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
-import {findStartActivity, isDuplicate} from './utils/utils'
+import {calculateES, findStartActivity, isDuplicate} from './utils/utils'
 
 // const tmpData: Task[] = [
 //   {
@@ -75,7 +75,7 @@ function App() {
   }
 
   const addActivity = (startId: number, endId: number, task: Task) => {
-    if(!activity?.filter(a => a.id === startId)){
+    if(!activity?.filter(a => a.id === startId).length){
       setActivity((prev) => [...prev!, {
         id: startId,
         ES: 0,
@@ -100,9 +100,11 @@ function App() {
       setActivity(tmp)
     }
   }
-
-  activity?.forEach(i => console.log(i.id))
-
+  const calc = ()=>{
+    const dupa = calculateES(activity!);
+    setActivity(dupa);
+  }
+  console.log(activity)
   return (
     <Box 
     className="App"
@@ -116,6 +118,7 @@ function App() {
         </Box>
       {entryData && <EntryDataTable data={entryData} onClick={deleteStep}/>}
       <NewDataForm onSubmit={addStep}/>
+      <Button variant="contained" onClick={()=>calc()}>Dodaj czynnosc </Button>
     </Box>
   );
 }

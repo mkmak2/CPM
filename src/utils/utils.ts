@@ -82,7 +82,8 @@ export const findStartActivity = (tasks: Task[]) => {
 export const isDuplicate = (tasks: Task[], task: Task):boolean =>{
     let result=false;
     tasks.forEach((value)=>{
-        if(task.startActivity===value.startActivity && task.endActivity===value.endActivity){
+        if(task.startActivity===value.startActivity && task.endActivity===value.endActivity ||
+        task.startActivity===value.endActivity && task.endActivity===value.startActivity){
             result = true;
         }
         return;
@@ -92,7 +93,8 @@ export const isDuplicate = (tasks: Task[], task: Task):boolean =>{
     return result;
 }
 
-export const calculateES = (activities: Activity[])=>{
+export const calculateES = (activities: Activity[]):Activity[]=>{
+
     activities.forEach((value)=>{
         if(value.id===1){
             value.ES=0
@@ -108,6 +110,6 @@ export const calculateES = (activities: Activity[])=>{
         }
 
 
-
     })
+    return activities;
 }
