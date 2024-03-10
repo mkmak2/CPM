@@ -84,7 +84,7 @@ function App() {
         connected: []
       }])
     }
-    if(!activity?.filter(a => a.id === endId)) {
+    if(!activity?.filter(a => a.id === endId).length) {
       setActivity((prev) => [...prev!, {
         id: endId,
         ES: 0,
@@ -93,12 +93,10 @@ function App() {
         connected: [task]
       }])
     } else {
-      const tmp = activity
-      activity.forEach(a => {
-        if(a.id === endId){
-          a.connected.push(task)
-        }
-      })
+      const tmp = [...activity]
+      const index = tmp.findIndex(i => i.id === endId)
+      const con = tmp[index].connected
+      tmp[index].connected = [...con, task]
       setActivity(tmp)
     }
   }
