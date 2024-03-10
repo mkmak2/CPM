@@ -1,52 +1,109 @@
 import { useState } from "react";
-import {Task} from '../types/types'
+import {Activity, Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
 import { Box } from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
 import {findStartActivity, isDuplicate} from './utils/utils'
 
-const tmpData: Task[] = [
-  {
-    id: 'A',
-    time: 5,
-    startActivity: 1,
-    endActivity: 2
-  },
-  {
-    id: 'B',
-    time: 3,
-    startActivity: 2,
-    endActivity: 3
-  },
-  {
-    id: 'C',
-    time: 4,
-    startActivity: 3,
-    endActivity: 4
-  },
-  {
-    id: 'D',
-    time: 6,
-    startActivity: 4,
-    endActivity: 5
-  }
-]
+// const tmpData: Task[] = [
+//   {
+//     id: 'A',
+//     time: 5,
+//     startActivity: 1,
+//     endActivity: 2
+//   },
+//   {
+//     id: 'B',
+//     time: 3,
+//     startActivity: 2,
+//     endActivity: 3
+//   },
+//   {
+//     id: 'C',
+//     time: 4,
+//     startActivity: 3,
+//     endActivity: 4
+//   },
+//   {
+//     id: 'D',
+//     time: 6,
+//     startActivity: 4,
+//     endActivity: 5
+//   }
+// ]
 
 function App() {
 
-  const [entryData, setEntryData] = useState<Task[]>(tmpData)
+  const [entryData, setEntryData] = useState<Task[]>()
+  const [activity, setActivity] = useState<Activity[]>()
   
   const deleteStep = (id: string) => {
-    const updatedData = entryData.filter( d => d.id !== id)
+    const updatedData = entryData!.filter( d => d.id !== id)
     setEntryData(updatedData)
   }
 
   const addStep = (step: Task) => {
-    if(isDuplicate(entryData,step))
-      return;
-    else
-      setEntryData((prevData) => [...prevData, step])
+    if(entryData){
+      if(isDuplicate(entryData!,step))
+        return;
+      else {
+        setEntryData((prevData) => [...prevData!, step])
+        addActivity(step.startActivity, step.endActivity, step)
+      }
+    }else {
+      const initialActivities = [
+        {
+          id: step.startActivity,
+          ES: 0,
+          EF: 0,
+          R:0,
+          connected: []
+        },
+        {
+          id: step.endActivity,
+          ES: 0,
+          EF: 0,
+          R: 0,
+          connected: [step]
+        }
+      ]
+      setActivity(initialActivities)
+      setEntryData([step])
+    }
+
+ 
   }
+
+  const addActivity = (startId: number, endId: number, task: Task) => {
+    if(!activity?.filter(a => a.id === startId)){
+      setActivity((prev) => [...prev!, {
+        id: startId,
+        ES: 0,
+        EF: 0,
+        R: 0,
+        connected: []
+      }])
+    }
+    if(!activity?.filter(a => a.id === endId)) {
+      setActivity((prev) => [...prev!, {
+        id: endId,
+        ES: 0,
+        EF: 0,
+        R: 0,
+        connected: [task]
+      }])
+    } else {
+      const tmp = activity
+      activity.forEach(a => {
+        if(a.id === endId){
+          a.connected.push(task)
+        }
+      })
+      setActivity(tmp)
+    }
+  }
+
+  activity?.forEach(i => console.log(i.id))
 
   return (
     <Box 
@@ -56,10 +113,10 @@ function App() {
     p={2}>
         <Box color='red' mb={2}>
           <span>
-            {findStartActivity(entryData).error}
+            {entryData && findStartActivity(entryData).error}
           </span>
         </Box>
-      <EntryDataTable data={entryData} onClick={deleteStep}/>
+      {entryData && <EntryDataTable data={entryData} onClick={deleteStep}/>}
       <NewDataForm onSubmit={addStep}/>
     </Box>
   );
