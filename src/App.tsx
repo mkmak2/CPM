@@ -57,14 +57,20 @@ function App() {
           ES: 0,
           EF: 0,
           R:0,
-          connected: []
+          connected: [],
+          isStart: false,
+          isEnd: false,
+          isCritical: false,
         },
         {
           id: step.endActivity,
           ES: 0,
           EF: 0,
           R: 0,
-          connected: [step]
+          connected: [step],
+          isStart: false,
+          isEnd: false,
+          isCritical: false,
         }
       ]
       setActivity(initialActivities)
@@ -81,7 +87,10 @@ function App() {
         ES: 0,
         EF: 0,
         R: 0,
-        connected: []
+        connected: [],
+        isStart: false,
+        isEnd: false,
+        isCritical: false,
       }])
     }
     if(!activity?.filter(a => a.id === endId).length) {
@@ -90,7 +99,10 @@ function App() {
         ES: 0,
         EF: 0,
         R: 0,
-        connected: [task]
+        connected: [task],
+        isStart: false,
+        isEnd: false,
+        isCritical: false,
       }])
     } else {
       const tmp = [...activity]

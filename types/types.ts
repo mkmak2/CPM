@@ -11,5 +11,7 @@ export type Activity = {
     EF: number,
     R:number,
     connected: Task[]
-
+    isStart:boolean;
+    isEnd:boolean;
+    isCritical:boolean;
 }
