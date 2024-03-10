@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Box from '@mui/material/Box'
 import { TextField, Button } from '@mui/material'
 import { Task } from '../../../types/types'
-import { forEachChild } from 'typescript'
 
 interface Props {
   onSubmit: (step: Task) => void
@@ -18,7 +17,7 @@ const NewDataForm = ({onSubmit}: Props) => {
     if(name !== 'id')
       setStepData((prevData) => ({...prevData, [name]: parseInt(value)}))
     else
-    setStepData((prevData) => ({...prevData, [name]: value}))
+      setStepData((prevData) => ({...prevData, [name]: value}))
   }
 
   const validation = () => {
@@ -34,13 +33,13 @@ const NewDataForm = ({onSubmit}: Props) => {
     return 1;
   }
 
-  const addActivity = () => {
+  const addtask = () => {
     if(validation()){
       onSubmit(stepData)
       setStepData({id: '', time: 0, startActivity: 0, endActivity:0})
    }
-
   }
+
 
   return (
     <Box
@@ -91,7 +90,7 @@ const NewDataForm = ({onSubmit}: Props) => {
       </Box>
         
       <Box mt={2} >
-        <Button variant="contained" onClick={(e) => addActivity()}>Dodaj czynnosc </Button>
+        <Button variant="contained" onClick={(e) => addtask()}>Dodaj czynnosc </Button>
         <Box mt={2} color='red'>
           <span>{error}</span>
         </Box>
