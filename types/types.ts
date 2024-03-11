@@ -10,7 +10,8 @@ export type Activity = {
     ES: number,
     EF: number,
     R:number,
-    connected: Task[]
+    connected: Task[];
+    nextTasks:Task[];
     isStart:boolean;
     isEnd:boolean;
     isCritical:boolean;

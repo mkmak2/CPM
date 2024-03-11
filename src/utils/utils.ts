@@ -93,23 +93,42 @@ export const isDuplicate = (tasks: Task[], task: Task):boolean =>{
     return result;
 }
 
-export const calculateES = (activities: Activity[]):Activity[]=>{
-
-    activities.forEach((value)=>{
-        if(value.id===1){
-            value.ES=0
-            value.EF=0;
+export const calculateES = (activities: Activity[]): Activity[] => {
+    const calculateESTime = (activity: Activity): number => {
+        if (activity.id===1) {
+            return 0;
+        } else {
+            return Math.max(
+                ...activity.connected.map((task) =>
+                    calculateESTime(
+                        activities.find((act) => act.id === task.startActivity)!
+                    ) + task.time
+                )
+            );
         }
-        else
-        {
-            value.ES = 0;
-            for(let i=0; i<value.connected.length; i++) {
-                let max = activities[value.connected[i].startActivity - 1].ES + value.connected[i].time;
-                value.ES = Math.max(value.ES, max);
-            }
-        }
+    };
 
+    const setESRecursive = (activity: Activity) => {
+        activity.ES = calculateESTime(activity);
+        activity.nextTasks.forEach((task) => {
+            const nextActivity = activities.find(
+                (act) => act.id === task.endActivity
+            ) as Activity;
+            console.log("dupa")
+            setESRecursive(nextActivity);
+        });
+    };
 
-    })
+    const startActivity = activities.find((act) => act.id===1)!
+    setESRecursive(startActivity);
+
     return activities;
-}
+};
+export const calculateEF = (activities: Activity[]): Activity[] => {
+    const lastActivity = activities.find(activity=>activity.isEnd);
+    if(lastActivity!==undefined)
+        lastActivity.EF = lastActivity.ES;
+
+
+    return activities;
+};
