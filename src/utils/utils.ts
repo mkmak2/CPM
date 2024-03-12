@@ -174,3 +174,18 @@ export const calculateEF = (activities: Activity[]): Activity[] => {
 
     return activities;
 };
+
+export const calculateCritical = ((activities :Activity[]) : Activity[] =>{
+
+    activities = calculateES(activities);
+    activities = calculateEF(activities);
+
+    activities.forEach((activity) =>{
+        activity.R = activity.EF - activity.ES;
+        if(!activity.R){
+            activity.isCritical=true;
+        }
+    })
+
+    return activities;
+})

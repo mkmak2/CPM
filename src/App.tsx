@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {Activity, Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
-import {Box, Button} from "@mui/material";
+import {Box} from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
-import {calculateEF, calculateES, findStartActivity, isDuplicate, setEdgesActivities} from './utils/utils'
+import {
+  calculateCritical,
+  calculateEF,
+  calculateES,
+  findStartActivity,
+  isDuplicate,
+  setEdgesActivities
+} from './utils/utils'
 
 function App() {
 
@@ -141,7 +148,7 @@ function App() {
 
 
   const calc = () => {
-    const updatedAtivity = calculateEF(calculateES(activity!));
+    const updatedAtivity = calculateCritical(activity!);
     setActivity(updatedAtivity);
   }
 
