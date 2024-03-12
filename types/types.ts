@@ -3,6 +3,11 @@ export type Task = {
     time: number,
     startActivity: number
     endActivity: number
+    ES:number;
+    EF:number;
+    LS:number;
+    LF:number;
+    R: number;
 }
 
 export type Activity = {

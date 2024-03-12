@@ -9,7 +9,7 @@ interface Props {
 
 const NewDataForm = ({onSubmit}: Props) => {
 
-  const [stepData, setStepData] = useState<Task>({id: '', time: 0, startActivity: 0, endActivity:0})
+  const [stepData, setStepData] = useState<Task>({id: '', time: 0, startActivity: 0, endActivity:0, EF:-1,ES:-1,LS:-1,LF:-1,R:-1})
   const [error, setError] = useState<string>('')
 
   const handleChange = (e: any) => {
@@ -36,7 +36,7 @@ const NewDataForm = ({onSubmit}: Props) => {
   const addtask = () => {
     if(validation()){
       onSubmit(stepData)
-      setStepData({id: '', time: 0, startActivity: 0, endActivity:0})
+      setStepData({id: '', time: 0, startActivity: 0, endActivity:0, EF:-1,ES:-1,LS:-1,LF:-1,R:-1})
    }
   }
 

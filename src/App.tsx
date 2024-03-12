@@ -5,8 +5,11 @@ import {Box} from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
 import {
   calculateCritical,
-  calculateEF,
-  calculateES,
+  calculateLF,
+  calculateLS,
+  calculateTaskEF,
+  calculateTaskES,
+  calculateTaskR, calculateTasks,
   findStartActivity,
   isDuplicate,
   setEdgesActivities
@@ -150,9 +153,13 @@ function App() {
   const calc = () => {
     const updatedAtivity = calculateCritical(activity!);
     setActivity(updatedAtivity);
+
+    setEntryData(calculateTasks(updatedAtivity,entryData!));
+
   }
 
   console.log(activity)
+  console.log(entryData);
   const status = entryData ? findStartActivity(entryData) : false
   return (
       <Box

@@ -189,3 +189,67 @@ export const calculateCritical = ((activities :Activity[]) : Activity[] =>{
 
     return activities;
 })
+
+export const calculateLF = ((activities :Activity[], tasks: Task[]) =>{
+
+    for(let i=0; i<tasks.length; i++){
+        tasks[i].LF = (activities[tasks[i].endActivity-1].EF);
+    }
+
+    return tasks;
+})
+
+export const calculateLS = ((activities: Activity[], tasks: Task[]) =>{
+
+    for(let i=0; i<tasks.length; i++){
+        tasks[i].LS = tasks[i].LF - tasks[i].time;
+    }
+
+    return tasks;
+
+})
+
+export const calculateTaskES = ((activities: Activity[], tasks: Task[])=>{
+
+    const ES:number[] = [];
+
+    for(let i=0; i<tasks.length; i++){
+        tasks[i].ES = activities[tasks[i].startActivity-1].ES;
+    }
+
+
+    return tasks;
+})
+
+export const calculateTaskEF = ((activities:Activity[], tasks:Task[])=>{
+
+    const EF:number[] =[];
+
+    for(let i=0; i<tasks.length; i++)
+    {
+        tasks[i].EF = activities[tasks[i].startActivity-1].ES + tasks[i].time;
+    }
+
+    return tasks;
+
+})
+
+export const calculateTaskR = ((tasks:Task[])=>{
+    const R:number[]=[];
+
+    for(let i=0; i<tasks.length; i++){
+        tasks[i].R = tasks[i].LS - tasks[i].ES;
+    }
+
+    return tasks;
+})
+
+export const calculateTasks = ((activity:Activity[], tasks:Task[])=>{
+    calculateLF(activity, tasks);
+    calculateLS(activity,tasks);
+    calculateTaskES(activity,tasks);
+    calculateTaskEF(activity,tasks);
+    calculateTaskR(tasks);
+
+    return tasks;
+})
