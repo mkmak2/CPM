@@ -79,6 +79,27 @@ export const findStartActivity = (tasks: Task[]) => {
         return result
 }
 
+export const setDefaultActivityState = (activities: Activity[]): Activity[] => {
+    activities.forEach(a => {
+        a.isCritical = false,
+        a.isEnd = false,
+        a.isStart = false
+    })
+
+    return activities
+}
+
+export const setEdgesActivities = (activities: Activity[], tasks: Task[]): Activity[] => {
+    const {startId, endId} = findStartActivity(tasks)
+    activities.forEach(a => {
+        if(a.id === startId)
+            a.isStart = true
+        else if(a.id === endId)
+            a.isEnd = true
+    })
+    return activities
+}
+
 export const isDuplicate = (tasks: Task[], task: Task):boolean =>{
     let result=false;
     tasks.forEach((value)=>{
@@ -114,7 +135,6 @@ export const calculateES = (activities: Activity[]): Activity[] => {
             const nextActivity = activities.find(
                 (act) => act.id === task.endActivity
             ) as Activity;
-            console.log("dupa")
             setESRecursive(nextActivity);
         });
     };

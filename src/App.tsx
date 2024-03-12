@@ -5,33 +5,6 @@ import {Box, Button} from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
 import {calculateEF, calculateES, findStartActivity, isDuplicate} from './utils/utils'
 
-// const tmpData: Task[] = [
-//   {
-//     id: 'A',
-//     time: 5,
-//     startActivity: 1,
-//     endActivity: 2
-//   },
-//   {
-//     id: 'B',
-//     time: 3,
-//     startActivity: 2,
-//     endActivity: 3
-//   },
-//   {
-//     id: 'C',
-//     time: 4,
-//     startActivity: 3,
-//     endActivity: 4
-//   },
-//   {
-//     id: 'D',
-//     time: 6,
-//     startActivity: 4,
-//     endActivity: 5
-//   }
-// ]
-
 function App() {
 
   const [entryData, setEntryData] = useState<Task[]>()
@@ -45,6 +18,9 @@ function App() {
       const tmp = entryData!.filter(d => d.endActivity === endId)
       if (tmp.length === 1) {
         const updatedActivity = activity!.filter(a => a.id !== endId)
+        updatedActivity.forEach(a => a.connected = a.connected.filter(c => c.id !== id))
+        updatedActivity.forEach(a => a.nextTasks= a.nextTasks.filter(c => c.id !== id))
+
         setActivity(updatedActivity)
       } else {
         const updatedActivity = activity!
@@ -149,11 +125,10 @@ function App() {
 
 
   const calc = () => {
-    const dupa = calculateES(activity!);
-    setActivity(dupa);
-    const dupa1 = calculateEF(activity!);
-    setActivity(dupa1);
+    const updatedAtivity = calculateEF(calculateES(activity!));
+    setActivity(updatedAtivity);
   }
+  
   console.log(activity)
   const status = entryData ? findStartActivity(entryData) : false
   return (
