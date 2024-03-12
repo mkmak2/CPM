@@ -91,6 +91,7 @@ export const setDefaultActivityState = (activities: Activity[]): Activity[] => {
 
 export const setEdgesActivities = (activities: Activity[], tasks: Task[]): Activity[] => {
     const {startId, endId} = findStartActivity(tasks)
+    activities = setDefaultActivityState(activities)
     activities.forEach(a => {
         if(a.id === startId)
             a.isStart = true
