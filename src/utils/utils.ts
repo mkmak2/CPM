@@ -81,9 +81,9 @@ export const findStartActivity = (tasks: Task[]) => {
 
 export const setDefaultActivityState = (activities: Activity[]): Activity[] => {
     activities.forEach(a => {
-        a.isCritical = false,
-        a.isEnd = false,
-        a.isStart = false
+        a.isCritical = false;
+        a.isEnd = false;
+        a.isStart = false;
     })
 
     return activities
@@ -145,10 +145,31 @@ export const calculateES = (activities: Activity[]): Activity[] => {
     return activities;
 };
 export const calculateEF = (activities: Activity[]): Activity[] => {
-    const lastActivity = activities.find(activity=>activity.isEnd);
-    if(lastActivity!==undefined)
-        lastActivity.EF = lastActivity.ES;
+    const calculateEFTime = (activity: Activity):number => {
+        if(activity.isEnd){
+            return activity.ES;
+        }
+        else{
+            return Math.min(
+                ...activity.nextTasks.map((task)=>
+                    calculateEFTime(
+                        activities.find((act:Activity)=> act.id ===task.endActivity)!
+                    ) - task.time
+                )
+            );
+        }
+    };
 
+    const setEFRecursive = (activity: Activity) =>{
+        activity.EF = calculateEFTime(activity);
+        activity.connected.forEach((task:Task) =>{
+            const prevActivity = activities.find((act)=>act.id === task.startActivity)!
+            setEFRecursive(prevActivity);
+        });
+    };
+    const startActivity = activities.find((act)=>act.isEnd)!;
+    setEFRecursive(startActivity);
+    return activities;
 
     return activities;
 };
