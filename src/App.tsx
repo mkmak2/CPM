@@ -14,12 +14,13 @@ import {
   isDuplicate,
   setEdgesActivities
 } from './utils/utils'
+import ResultsDataTable from "./components/ResultsDataTable/ResultsDataTable";
 
 function App() {
 
   const [entryData, setEntryData] = useState<Task[]>()
   const [activity, setActivity] = useState<Activity[]>()
-
+  const [showTable, setShowTable] = useState<boolean>(false)
   const deleteStep = (id: string, endId: number) => {
     const updatedData = entryData!.filter(d => d.id !== id)
     if (entryData?.length === 1)
@@ -156,6 +157,7 @@ function App() {
 
     setEntryData(calculateTasks(updatedAtivity,entryData!));
 
+    setShowTable(true);
   }
 
   console.log(activity)
@@ -179,6 +181,7 @@ function App() {
             {entryData && findStartActivity(entryData).error}
           </span>
         </Box>
+        {showTable && <ResultsDataTable data={entryData!}></ResultsDataTable>}
       </Box>
   );
 }

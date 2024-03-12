@@ -211,8 +211,6 @@ export const calculateLS = ((activities: Activity[], tasks: Task[]) =>{
 
 export const calculateTaskES = ((activities: Activity[], tasks: Task[])=>{
 
-    const ES:number[] = [];
-
     for(let i=0; i<tasks.length; i++){
         tasks[i].ES = activities[tasks[i].startActivity-1].ES;
     }
@@ -222,8 +220,6 @@ export const calculateTaskES = ((activities: Activity[], tasks: Task[])=>{
 })
 
 export const calculateTaskEF = ((activities:Activity[], tasks:Task[])=>{
-
-    const EF:number[] =[];
 
     for(let i=0; i<tasks.length; i++)
     {
@@ -235,7 +231,6 @@ export const calculateTaskEF = ((activities:Activity[], tasks:Task[])=>{
 })
 
 export const calculateTaskR = ((tasks:Task[])=>{
-    const R:number[]=[];
 
     for(let i=0; i<tasks.length; i++){
         tasks[i].R = tasks[i].LS - tasks[i].ES;
