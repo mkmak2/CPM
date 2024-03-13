@@ -1,5 +1,5 @@
 import {Activity, Task} from '../../types/types'
-import cytoscape from "cytoscape";
+import cytoscape, {EdgeDataDefinition, NodeDataDefinition} from "cytoscape";
 
 
 export const findStartActivity = (tasks: Task[]) => {
@@ -252,18 +252,66 @@ export const calculateTasks = ((activity:Activity[], tasks:Task[])=>{
 })
 
 export const graph = (activities:Activity[], tasks: Task[])=>{
+    const nodes = activities.map(activity => ({
+        data: {
+            id: activity.id.toString(),
+            values: `${activity.id}\n${activity.ES}      ${activity.EF}\n${activity.R}`
+        }
+    }));
 
-    const nodes =  activities.map(activity => ({ data: { id: activity.id.toString() } }))
-    const edges=  tasks.map(task => ({ data: { source: task.startActivity.toString(), target: task.endActivity.toString() } }))
-
+    const edges = tasks.map(task => ({
+        data: {
+            source: task.startActivity.toString(),
+            target: task.endActivity.toString(),
+            label: `${task.id}${task.time}`
+        }
+    }));
 
     let cy = cytoscape({
-        container:document.getElementById('cy'),
+        container: document.getElementById('cy'),
         elements: [
             ...nodes,
             ...edges
-        ]
-    })
+        ],
+        style: [
+            {
+                selector: 'node',
+                style: {
+                    'background-color': 'gray',
+                    'border-width': '2px',
+                    'border-color': 'black',
+                    'text-valign': 'center',
+                    'text-halign': 'center',
+                    'text-wrap': 'wrap',
+                    label: 'data(values)',
+                    width: '100px',
+                    height: '100px',
+                    'text-margin-y': 0,
+                    'text-margin-x': 0,
+                    'font-size': '20px',
+                    'color': 'white',
+
+                }
+            },
+            {
+                selector: 'edge',
+                style: {
+                    'target-arrow-shape': 'triangle',
+                    'curve-style': 'bezier',
+                    'line-color': 'black',
+                    'target-arrow-color': 'black',
+                    'width': 2,
+                    'label': 'data(label)',
+                    'text-rotation': 'autorotate',
+                    'text-margin-y': -10,
+                    'text-margin-x': 0
+                }
+            }
+        ],
+        layout: {
+            name: 'grid'
+        }
+    });
 
     return cy;
 }

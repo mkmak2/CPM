@@ -191,7 +191,7 @@ function App() {
         </Box>
 
         {showTable && <ResultsDataTable data={entryData!}></ResultsDataTable>}
-        <div id={"cy"} style={{width:"1000px", height: "1000px"}}>d ddd </div>
+        <div id={"cy"} style={{width:"1000px", height: "1000px"}}></div>
 
       </Box>
 
