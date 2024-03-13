@@ -1,4 +1,6 @@
 import {Activity, Task} from '../../types/types'
+import cytoscape from "cytoscape";
+
 
 export const findStartActivity = (tasks: Task[]) => {
     //wyszukanie zdarzenia, ktore wsytepuje jedynie jako poczatkowe w czynnosciach
@@ -248,3 +250,20 @@ export const calculateTasks = ((activity:Activity[], tasks:Task[])=>{
 
     return tasks;
 })
+
+export const graph = (activities:Activity[], tasks: Task[])=>{
+
+    const nodes =  activities.map(activity => ({ data: { id: activity.id.toString() } }))
+    const edges=  tasks.map(task => ({ data: { source: task.startActivity.toString(), target: task.endActivity.toString() } }))
+
+
+    let cy = cytoscape({
+        container:document.getElementById('cy'),
+        elements: [
+            ...nodes,
+            ...edges
+        ]
+    })
+
+    return cy;
+}

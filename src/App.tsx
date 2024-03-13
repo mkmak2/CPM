@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Activity, Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
 import {Box} from "@mui/material";
@@ -10,17 +10,21 @@ import {
   calculateTaskEF,
   calculateTaskES,
   calculateTaskR, calculateTasks,
-  findStartActivity,
+  findStartActivity, graph,
   isDuplicate,
   setEdgesActivities
 } from './utils/utils'
 import ResultsDataTable from "./components/ResultsDataTable/ResultsDataTable";
+import ReactDOM from "react-dom/client";
 
 function App() {
 
   const [entryData, setEntryData] = useState<Task[]>()
   const [activity, setActivity] = useState<Activity[]>()
   const [showTable, setShowTable] = useState<boolean>(false)
+
+
+
   const deleteStep = (id: string, endId: number) => {
     const updatedData = entryData!.filter(d => d.id !== id)
     if (entryData?.length === 1)
@@ -158,12 +162,16 @@ function App() {
     setEntryData(calculateTasks(updatedAtivity,entryData!));
 
     setShowTable(true);
+
+    const cy = graph(activity!, entryData!);
+
   }
 
   console.log(activity)
   console.log(entryData);
   const status = entryData ? findStartActivity(entryData) : false
   return (
+
       <Box
           className="App"
           display='flex-col'
@@ -181,8 +189,14 @@ function App() {
             {entryData && findStartActivity(entryData).error}
           </span>
         </Box>
+
         {showTable && <ResultsDataTable data={entryData!}></ResultsDataTable>}
+        <div id={"cy"} style={{width:"1000px", height: "1000px"}}>d ddd </div>
+
       </Box>
+
+
   );
 }
+
   export default App;
