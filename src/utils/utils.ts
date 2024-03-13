@@ -1,4 +1,6 @@
 import {Activity, Task} from '../../types/types'
+import cytoscape, {EdgeDataDefinition, NodeDataDefinition} from "cytoscape";
+
 
 export const findStartActivity = (tasks: Task[]) => {
     //wyszukanie zdarzenia, ktore wsytepuje jedynie jako poczatkowe w czynnosciach
@@ -193,7 +195,7 @@ export const calculateCritical = ((activities :Activity[]) : Activity[] =>{
 export const calculateLF = ((activities :Activity[], tasks: Task[]) =>{
 
     for(let i=0; i<tasks.length; i++){
-        tasks[i].LF = (activities[tasks[i].endActivity-1].EF);
+        tasks[i].LF = activities.find(activity => activity.id ===tasks[i].endActivity)?.EF!;
     }
 
     return tasks;
@@ -212,7 +214,9 @@ export const calculateLS = ((activities: Activity[], tasks: Task[]) =>{
 export const calculateTaskES = ((activities: Activity[], tasks: Task[])=>{
 
     for(let i=0; i<tasks.length; i++){
-        tasks[i].ES = activities[tasks[i].startActivity-1].ES;
+        tasks[i].ES = activities.find(activity =>
+            activity.id === tasks[i].startActivity)?.ES!;
+
     }
 
 
@@ -223,7 +227,7 @@ export const calculateTaskEF = ((activities:Activity[], tasks:Task[])=>{
 
     for(let i=0; i<tasks.length; i++)
     {
-        tasks[i].EF = activities[tasks[i].startActivity-1].ES + tasks[i].time;
+        tasks[i].EF = tasks[i].ES + tasks[i].time;
     }
 
     return tasks;
@@ -248,3 +252,88 @@ export const calculateTasks = ((activity:Activity[], tasks:Task[])=>{
 
     return tasks;
 })
+
+export const graph = (activities:Activity[], tasks: Task[])=>{
+    const nodes = activities.map(activity => ({
+        data: {
+            id: activity.id.toString(),
+            values: `${activity.id}\n${activity.ES}      ${activity.EF}\n${activity.R}`,
+            r: activity.R
+        }
+    }));
+
+    const edges = tasks.map(task => ({
+        data: {
+            source: task.startActivity.toString(),
+            target: task.endActivity.toString(),
+            label: `${task.id}${task.time}`,
+            r: task.R
+        }
+    }));
+
+    let cy = cytoscape({
+        container: document.getElementById('cy'),
+        elements: [
+            ...nodes,
+            ...edges
+        ],
+        style: [
+            {
+                selector: 'node',
+
+                style: {
+                    'background-color' : 'white',
+                    'border-width': '2px',
+                    'border-color': 'black',
+                    'text-valign': 'center',
+                    'text-halign': 'center',
+                    'text-wrap': 'wrap',
+                    label: 'data(values)',
+                    width: '100px',
+                    height: '100px',
+                    'text-margin-y': 0,
+                    'text-margin-x': 0,
+                    'font-size': '20px',
+                    'color': 'black',
+
+                }
+            },
+            {
+              selector: 'node[r = 0]',
+              style: {
+                  'background-color': '#c8e6c9',
+              }
+            },
+
+
+            {
+                selector: 'edge',
+                style: {
+                    'target-arrow-shape': 'triangle',
+                    'curve-style': 'bezier',
+                    'line-color': 'black',
+                    'target-arrow-color': 'black',
+                    'width': 2,
+                    'label': 'data(label)',
+                    'text-rotation': 'autorotate',
+                    'text-margin-y': -20,
+                    'text-margin-x': 10
+                }
+            },
+            {
+                selector: 'edge[r = 0]',
+                style : {
+                    'line-color': 'red',
+                    'target-arrow-color': 'red',
+                    'color' : 'red'
+                }
+            },
+        ],
+        layout: {
+            name: 'grid',
+        }
+
+    });
+
+    return cy;
+}
