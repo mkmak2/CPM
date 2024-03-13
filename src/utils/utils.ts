@@ -195,7 +195,7 @@ export const calculateCritical = ((activities :Activity[]) : Activity[] =>{
 export const calculateLF = ((activities :Activity[], tasks: Task[]) =>{
 
     for(let i=0; i<tasks.length; i++){
-        tasks[i].LF = (activities[tasks[i].endActivity-1].EF);
+        tasks[i].LF = activities.find(activity => activity.id ===tasks[i].endActivity)?.EF!;
     }
 
     return tasks;
@@ -214,7 +214,9 @@ export const calculateLS = ((activities: Activity[], tasks: Task[]) =>{
 export const calculateTaskES = ((activities: Activity[], tasks: Task[])=>{
 
     for(let i=0; i<tasks.length; i++){
-        tasks[i].ES = activities[tasks[i].startActivity-1].ES;
+        tasks[i].ES = activities.find(activity =>
+            activity.id === tasks[i].startActivity)?.ES!;
+
     }
 
 
@@ -225,7 +227,7 @@ export const calculateTaskEF = ((activities:Activity[], tasks:Task[])=>{
 
     for(let i=0; i<tasks.length; i++)
     {
-        tasks[i].EF = activities[tasks[i].startActivity-1].ES + tasks[i].time;
+        tasks[i].EF = tasks[i].ES + tasks[i].time;
     }
 
     return tasks;
@@ -255,7 +257,8 @@ export const graph = (activities:Activity[], tasks: Task[])=>{
     const nodes = activities.map(activity => ({
         data: {
             id: activity.id.toString(),
-            values: `${activity.id}\n${activity.ES}      ${activity.EF}\n${activity.R}`
+            values: `${activity.id}\n${activity.ES}      ${activity.EF}\n${activity.R}`,
+            r: activity.R
         }
     }));
 
@@ -263,7 +266,8 @@ export const graph = (activities:Activity[], tasks: Task[])=>{
         data: {
             source: task.startActivity.toString(),
             target: task.endActivity.toString(),
-            label: `${task.id}${task.time}`
+            label: `${task.id}${task.time}`,
+            r: task.R
         }
     }));
 
@@ -276,8 +280,9 @@ export const graph = (activities:Activity[], tasks: Task[])=>{
         style: [
             {
                 selector: 'node',
+
                 style: {
-                    'background-color': 'gray',
+                    'background-color' : 'white',
                     'border-width': '2px',
                     'border-color': 'black',
                     'text-valign': 'center',
@@ -289,10 +294,18 @@ export const graph = (activities:Activity[], tasks: Task[])=>{
                     'text-margin-y': 0,
                     'text-margin-x': 0,
                     'font-size': '20px',
-                    'color': 'white',
+                    'color': 'black',
 
                 }
             },
+            {
+              selector: 'node[r = 0]',
+              style: {
+                  'background-color': '#c8e6c9',
+              }
+            },
+
+
             {
                 selector: 'edge',
                 style: {
@@ -303,14 +316,23 @@ export const graph = (activities:Activity[], tasks: Task[])=>{
                     'width': 2,
                     'label': 'data(label)',
                     'text-rotation': 'autorotate',
-                    'text-margin-y': -10,
-                    'text-margin-x': 0
+                    'text-margin-y': -20,
+                    'text-margin-x': 10
                 }
-            }
+            },
+            {
+                selector: 'edge[r = 0]',
+                style : {
+                    'line-color': 'red',
+                    'target-arrow-color': 'red',
+                    'color' : 'red'
+                }
+            },
         ],
         layout: {
-            name: 'grid'
+            name: 'grid',
         }
+
     });
 
     return cy;
