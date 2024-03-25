@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Activity, Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
 import {Box} from "@mui/material";
@@ -22,8 +22,6 @@ function App() {
   const [entryData, setEntryData] = useState<Task[]>()
   const [activity, setActivity] = useState<Activity[]>()
   const [showTable, setShowTable] = useState<boolean>(false)
-
-
 
   const deleteStep = (id: string, endId: number) => {
     const updatedData = entryData!.filter(d => d.id !== id)
@@ -174,9 +172,12 @@ function App() {
 
       <Box
           className="App"
-          display='flex-col'
+          display='flex'
           gap={4}
-          p={2}>
+          p={2}
+          width={'100%'}
+      >
+        <Box width={"50%"}>
         <NewDataForm onSubmit={addStep}/>
         {entryData &&
             <EntryDataTable
@@ -191,8 +192,10 @@ function App() {
         </Box>
 
         {showTable && <ResultsDataTable data={entryData!}></ResultsDataTable>}
-        <div id={"cy"} style={{width:"1000px", height: "1000px"}}></div>
-
+        </Box>
+        <Box width={"50%"}>
+          <div id={"cy"} style={{width:"100%", height: "1000px"}}></div>
+        </Box>
       </Box>
 
 

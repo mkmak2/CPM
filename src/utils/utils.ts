@@ -331,8 +331,10 @@ export const graph = (activities:Activity[], tasks: Task[])=>{
         ],
         layout: {
             name: 'grid',
-        }
-
+        },
+        wheelSensitivity: 0,
+        zoom: 0.1,
+        userPanningEnabled: false
     });
 
     return cy;
