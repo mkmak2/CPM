@@ -175,9 +175,8 @@ function App() {
           display='flex'
           gap={4}
           p={2}
-          width={'100%'}
       >
-        <Box width={"50%"}>
+        <Box >
         <NewDataForm onSubmit={addStep}/>
         {entryData &&
             <EntryDataTable
@@ -193,8 +192,8 @@ function App() {
 
         {showTable && <ResultsDataTable data={entryData!}></ResultsDataTable>}
         </Box>
-        <Box width={"50%"}>
-          <div id={"cy"} style={{width:"100%", height: "1000px"}}></div>
+        <Box width={600}>
+          <div id={"cy"} style={{width: '1000px', height: "1000px"}}></div>
         </Box>
       </Box>
 
