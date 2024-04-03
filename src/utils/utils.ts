@@ -1,5 +1,5 @@
 import {Activity, Task} from '../../types/types'
-import cytoscape, {EdgeDataDefinition, NodeDataDefinition} from "cytoscape";
+import cytoscape from "cytoscape";
 
 
 export const findStartActivity = (tasks: Task[]) => {

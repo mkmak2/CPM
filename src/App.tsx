@@ -1,21 +1,17 @@
-import React, {useEffect, useRef, useState} from "react";
+import {useState} from "react";
 import {Activity, Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
 import {Box} from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
 import {
   calculateCritical,
-  calculateLF,
-  calculateLS,
-  calculateTaskEF,
-  calculateTaskES,
-  calculateTaskR, calculateTasks,
+  calculateTasks,
   findStartActivity, graph,
   isDuplicate,
   setEdgesActivities
 } from './utils/utils'
 import ResultsDataTable from "./components/ResultsDataTable/ResultsDataTable";
-import ReactDOM from "react-dom/client";
+
 
 function App() {
 

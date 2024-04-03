@@ -24,7 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -46,6 +46,9 @@
     ]
   },
   "devDependencies": {
-    "@types/cytoscape": "^3.19.16"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-typescript": "^7.24.1",
+    "@types/cytoscape": "^3.19.16",
+    "jest": "^27.5.1"
   }
 }
