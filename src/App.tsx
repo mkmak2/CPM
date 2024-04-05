@@ -5,11 +5,7 @@ import {Box} from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
 import {
   calculateCritical,
-  calculateLF,
-  calculateLS,
-  calculateTaskEF,
-  calculateTaskES,
-  calculateTaskR, calculateTasks,
+  calculateTasks,
   findStartActivity, graph,
   isDuplicate,
   setEdgesActivities
@@ -185,7 +181,7 @@ function App() {
                 onClick={deleteStep}
                 calc={calc}/>}
         <Box color='red' mb={2}>
-          <span>
+          <span data-cy='error-msg'>
             {entryData && findStartActivity(entryData).error}
           </span>
         </Box>

@@ -42,7 +42,7 @@ const EntryDataTable = ({data, onClick, status, calc}: Props) => {
             <TableContainer
                 component={Paper}
                 sx={{maxWidth: 600, maxHeight: 500, marginBottom: 2}}>
-                <Table sx={{ minWidth: 600 }} aria-label="simple table">
+                <Table data-cy='entry-table' sx={{ minWidth: 600 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell align='center'>Czynnosc</TableCell>
@@ -57,7 +57,7 @@ const EntryDataTable = ({data, onClick, status, calc}: Props) => {
                 </Table>
             </TableContainer>
             { status ?
-                <Button variant="contained" onClick={() => calc()} >Wykonaj</Button>
+                <Button variant="contained" data-cy='execute' onClick={() => calc()} >Wykonaj</Button>
                 :
                 <Button disabled variant="contained" >Wykonaj</Button>
             }

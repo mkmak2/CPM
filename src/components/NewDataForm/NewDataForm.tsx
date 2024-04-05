@@ -52,6 +52,7 @@ const NewDataForm = ({onSubmit}: Props) => {
       justifyContent={'space-between'}
       width={600}>
         <TextField 
+          data-cy='activity-name'
           id="standard-basic" 
           label="Nazwa czynnosci" 
           variant="standard"
@@ -59,6 +60,7 @@ const NewDataForm = ({onSubmit}: Props) => {
           value={stepData.id}
           onChange={(e) => handleChange(e)}/>
         <TextField 
+          data-cy='activity-time'
           id="standard-basic" 
           label="Czas trwania" 
           variant="standard" 
@@ -73,6 +75,7 @@ const NewDataForm = ({onSubmit}: Props) => {
         width={600}
         mt={2}>
         <TextField 
+          data-cy='start-activity'
           id="standard-basic" 
           label="Zdarzenie poczatkowe" 
           variant="standard"
@@ -80,6 +83,7 @@ const NewDataForm = ({onSubmit}: Props) => {
           value={stepData.startActivity ? stepData.startActivity : ''}
           onChange={(e) => handleChange(e)}/>
         <TextField 
+          data-cy='end-activity'
           id="standard-basic" 
           label="Zdarzenie koncowe" 
           variant="standard" 
@@ -90,7 +94,7 @@ const NewDataForm = ({onSubmit}: Props) => {
       </Box>
         
       <Box mt={2} >
-        <Button variant="contained" onClick={(e) => addtask()}>Dodaj czynnosc </Button>
+        <Button variant="contained" data-cy='add-task' onClick={(e) => addtask()}>Dodaj czynnosc </Button>
         <Box mt={2} color='red'>
           <span>{error}</span>
         </Box>
