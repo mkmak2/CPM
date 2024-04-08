@@ -21,3 +21,17 @@ export type Activity = {
     isEnd:boolean;
     isCritical:boolean;
 }
+
+export type Customer = {
+    name:string;
+    demand: number;
+    sellingPrice:number;
+    suppliers: Supplier[];
+}
+
+export type Supplier = {
+    name:string;
+    supply:number;
+    purchacePrice:number;
+    customers: Customer[];
+}
