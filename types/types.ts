@@ -26,12 +26,12 @@ export type Customer = {
     name:string;
     demand: number;
     sellingPrice:number;
-    suppliers: Supplier[];
+    suppliers: {[name:string]:number};
 }
 
 export type Supplier = {
     name:string;
     supply:number;
-    purchacePrice:number;
-    customers: Customer[];
+    purchasePrice:number;
+
 }
