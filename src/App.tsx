@@ -29,34 +29,10 @@ function App() {
   const [chooseMethod, setChooseMethod] = useState<string>("0")
   const [customersNum, setCustomersNum] = useState<number>(0);
   const [suppliersNum, setSuppliersNum] = useState<number>(0);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [showTablesMiddleman, setShowTablesMiddleman] = useState<boolean>(false);
 
-  const Customers:Customer[] = [
-    {
-      name:"Customer 1",
-      demand:100,
-      sellingPrice:300,
-      suppliers: {
-        "Supplier 1": 1,
-        "Supplier 2": 5,
-        "Supplier 3": 7
-      }
-    },
-    {
-      name: "Customer 2",
-      demand: 200,
-      sellingPrice: 400,
-      suppliers: {
-        "Supplier 1": 3,
-        "Supplier 2": 8,
-        "Supplier 3": 5
-      }
-    }
-  ]
-  const Suppliers:Supplier[] = [
-    { name: "Supplier 1", supply: 50, purchasePrice: 3},
-    { name: "Supplier 2", supply: 30, purchasePrice: 7 },
-    { name: "Supplier 3", supply: 20, purchasePrice: 6 }
-  ]
   const deleteStep = (id: string, endId: number) => {
     const updatedData = entryData!.filter(d => d.id !== id)
     if (entryData?.length === 1)
@@ -216,7 +192,32 @@ function App() {
 
   const handleOnClick = () => {
 
+    for(let i=0; i<customersNum;i++)
+    {
+      let customer:Customer = {
+        name:"Odbiorca" + " " + i,
+        demand:0,
+        sellingPrice:0,
+        suppliers:{}
+      }
+      customers.push(customer);
+    }
+    for(let i=0; i<suppliersNum;i++)
+    {
+
+      let supplier:Supplier = {
+        name:"Dostawca" + " " + i,
+        supply:0,
+        purchasePrice:0
+      }
+      suppliers.push(supplier);
+    }
+
+    setShowTablesMiddleman(true);
   }
+
+  console.log(customers);
+  console.log(suppliers);
 
   const status = entryData ? findStartActivity(entryData) : false
   return (
@@ -281,8 +282,9 @@ function App() {
             </Box>
 
             <Button variant={"contained"} onClick={handleOnClick}>Potwierdź</Button>
-
-            <EntryDataTableMiddleman customers={Customers} suppliers={Suppliers}></EntryDataTableMiddleman>
+            {showTablesMiddleman ?
+            <EntryDataTableMiddleman customers={customers!} suppliers={suppliers!} setCustomers={setCustomers} setSuppliers={setSuppliers}></EntryDataTableMiddleman>
+                : <div></div>}
           </TabPanel>
       </TabContext>
 
