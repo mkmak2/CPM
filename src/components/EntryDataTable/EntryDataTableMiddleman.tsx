@@ -15,11 +15,11 @@ interface Props {
     suppliers: Supplier[];
     setCustomers: React.Dispatch<React.SetStateAction<Customer[]>>;
     setSuppliers: React.Dispatch<React.SetStateAction<Supplier[]>>;
-
-
+    calculate: ()=>void;
+    status: boolean;
 }
 
-const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppliers}: Props) => {
+const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppliers, calculate, status}: Props) => {
 
     const dataDisplay = customers.map(e => {
 
@@ -31,7 +31,7 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
                 <TableCell key={e.name} align="center">{e.name}</TableCell>
                 {suppliers.map(s=>{
                     return(<TableCell align={"center"}>
-                            <TextField variant={"standard"} sx={{width:'30%'}} type={"number"}>
+                            <TextField variant={"standard"} sx={{width:'30%'}} type={"number"} onChange={(f)=>handleTransportCost(f, e, s)}>
                             </TextField>
                         </TableCell>
                     )
@@ -47,8 +47,8 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
     const customersDataDisplay = customers.map((e,index)=>{
         return(
             <TableRow>
-                <TableCell align={"center"}><TextField  variant={"standard"} sx={{width:'50%'}} onChange={(s)=>handleChangeCustomer(s,index, "name")}>
-                </TextField></TableCell>
+                <TableCell align={"center"}>{e.name}
+            </TableCell>
                 <TableCell align={"center"}> <TextField variant={"standard"} sx={{width:'30%'}} type={"number"} onChange={(s)=>handleChangeCustomer(s,index, "demand")}>
                 </TextField></TableCell>
                 <TableCell align={"center"}> <TextField variant={"standard"} sx={{width:'30%'}} type={"number"} onChange={(s)=>handleChangeCustomer(s,index, "selling")}>
@@ -59,8 +59,7 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
     const suppliersDataDisplay = suppliers.map((e,index)=>{
         return(
             <TableRow>
-                <TableCell align={"center"}><TextField variant={"standard"} sx={{width:'50%'}} onChange={(s)=>handleChangeSupplier(s,index, "name")}>
-                    </TextField></TableCell>
+                <TableCell align={"center"}>{e.name}</TableCell>
                 <TableCell align={"center"}><TextField variant={"standard"} sx={{width:'30%'}} type={"number"} onChange={(s)=>handleChangeSupplier(s,index, "supply")}>
                     </TextField></TableCell>
                 <TableCell align={"center"}><TextField variant={"standard"} sx={{width:'30%'}} type={"number"} onChange={(s)=>handleChangeSupplier(s,index, "purchase")}>
@@ -95,6 +94,27 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
 
     }
 
+    const handleTransportCost = (e:any, customer:Customer, supplier:Supplier) =>{
+        customer.suppliers[supplier.name] = e.target.value;
+    }
+
+    const unitMatrixDisplay = customers.map(e => {
+
+        return (
+            <TableRow
+                key={e.name}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+                <TableCell key={e.name} align="center">{e.name}</TableCell>
+                {suppliers.map(s=>{
+                    return(<TableCell align={"center"}>
+                            {e.suppliers[s.name]}
+                        </TableCell>
+                    )
+                })}
+            </TableRow>
+        )})
+
     return (
         <Box>
 
@@ -104,9 +124,9 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
                 <Table sx={{ minWidth: 600 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align='center'>Nazwa dostawcy</TableCell>
-                            <TableCell align='center'>Podaż</TableCell>
-                            <TableCell align='center'>Koszt zakupu</TableCell>
+                            <TableCell align='center'>Nazwa odbiorcy</TableCell>
+                            <TableCell align='center'>Popyt</TableCell>
+                            <TableCell align='center'>Cena sprzedaży</TableCell>
                         </TableRow>
 
                     </TableHead>
@@ -122,9 +142,9 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
                 <Table sx={{ minWidth: 600 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align='center'>Nazwa odbiorcy</TableCell>
-                            <TableCell align='center'>Popyt</TableCell>
-                            <TableCell align='center'>Cena sprzedaży</TableCell>
+                            <TableCell align='center'>Nazwa dostawcy</TableCell>
+                            <TableCell align='center'>Podaż</TableCell>
+                            <TableCell align='center'>Koszt zakupu</TableCell>
                         </TableRow>
 
                     </TableHead>
@@ -150,7 +170,27 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
                     </TableBody>
                 </Table>
             </TableContainer>
-        <Button onClick={()=>{console.log(customers)}}>Przycisk</Button>
+            {!status?
+        <Button variant={"contained"} onClick={calculate}>Oblicz macierz jednostkową</Button>:
+            <Button disabled variant={"contained"} >Oblicz macierz jednostkową</Button>}
+
+            <TableContainer
+                component={Paper}
+                sx={{maxWidth: 600, maxHeight: 500, marginBottom: 2}}>
+                <Table sx={{ minWidth: 600 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align='center'></TableCell>
+                            {suppliersDisplay}
+                        </TableRow>
+
+                    </TableHead>
+                    <TableBody>
+                        {unitMatrixDisplay}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
         </Box>
 
 

@@ -20,7 +20,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import EntryDataTableMiddleman from "./components/EntryDataTable/EntryDataTableMiddleman";
-
+import {calculateUnitMatrix} from "./utils/middlemanUtils";
 function App() {
 
   const [entryData, setEntryData] = useState<Task[]>()
@@ -32,6 +32,7 @@ function App() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [showTablesMiddleman, setShowTablesMiddleman] = useState<boolean>(false);
+  const [showUnitMatrix, setShowUnitMatrix] = useState<boolean>(false);
 
   const deleteStep = (id: string, endId: number) => {
     const updatedData = entryData!.filter(d => d.id !== id)
@@ -195,7 +196,7 @@ function App() {
     for(let i=0; i<customersNum;i++)
     {
       let customer:Customer = {
-        name:"Odbiorca" + " " + i,
+        name:"Odbiorca" + " " + (i+1),
         demand:0,
         sellingPrice:0,
         suppliers:{}
@@ -206,18 +207,32 @@ function App() {
     {
 
       let supplier:Supplier = {
-        name:"Dostawca" + " " + i,
+        name:"Dostawca" + " " + (i+1),
         supply:0,
         purchasePrice:0
       }
+
       suppliers.push(supplier);
+    }
+
+    for(let i=0; i<customersNum;i++)
+    {
+      for(let j=0; j<suppliersNum;j++)
+      {
+        customers[i].suppliers[suppliers[j].name] = 0;
+      }
     }
 
     setShowTablesMiddleman(true);
   }
 
-  console.log(customers);
-  console.log(suppliers);
+  const calculate = () => {
+      calculateUnitMatrix(customers, suppliers);
+      setShowUnitMatrix(true);
+      console.log(customers);
+  }
+
+
 
   const status = entryData ? findStartActivity(entryData) : false
   return (
@@ -283,7 +298,7 @@ function App() {
 
             <Button variant={"contained"} onClick={handleOnClick}>Potwierdź</Button>
             {showTablesMiddleman ?
-            <EntryDataTableMiddleman customers={customers!} suppliers={suppliers!} setCustomers={setCustomers} setSuppliers={setSuppliers}></EntryDataTableMiddleman>
+            <EntryDataTableMiddleman customers={customers!} suppliers={suppliers!} setCustomers={setCustomers} setSuppliers={setSuppliers} calculate={calculate} status={showUnitMatrix}></EntryDataTableMiddleman>
                 : <div></div>}
           </TabPanel>
       </TabContext>
