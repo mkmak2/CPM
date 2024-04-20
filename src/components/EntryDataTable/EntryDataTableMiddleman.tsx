@@ -174,6 +174,7 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
         <Button variant={"contained"} onClick={calculate}>Oblicz macierz jednostkową</Button>:
             <Button disabled variant={"contained"} >Oblicz macierz jednostkową</Button>}
 
+            {status?
             <TableContainer
                 component={Paper}
                 sx={{maxWidth: 600, maxHeight: 500, marginBottom: 2}}>
@@ -190,7 +191,7 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
                     </TableBody>
                 </Table>
             </TableContainer>
-
+                : <div></div>}
         </Box>
 
 
