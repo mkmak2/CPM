@@ -16,11 +16,15 @@ agent any
                 sh '''
                     docker run -itd --name=build_container build
                     docker run -v $PWD:/e2e -w /e2e cypress/included:10.3.1-typescript
-
-                    docker stop build_container
-                    docker stop cypress_container
                 '''
             }
+        }
+    }
+    post{
+        always{
+            docker stop build_container
+            docker stop cypress_container
+            docker container prune -f
         }
     }
 }
