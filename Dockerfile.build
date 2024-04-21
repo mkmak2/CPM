@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install --global serve
+RUN npm install --save-dev
 RUN npm run build
 
 EXPOSE 3000
