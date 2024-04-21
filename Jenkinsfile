@@ -22,8 +22,8 @@ agent any
             steps{
                 echo "Test stage"
                 sh '''
-                    docker run --network=our-net -itd --name=build_container build
-                    docker run -it --network=our-net -v $PWD:/e2e -w /e2e --name=cypress_container cypress/included:12.8.1
+                    docker run --network=our-net -itd -p 3000:3000 --name=build_container build
+                    docker run -it --network=our-net -v $PWD:/e2e -w /e2e -p 5000:5000 --name=cypress_container cypress/included:12.8.1
 
                     docker stop build_container
                     docker stop cypress_container
