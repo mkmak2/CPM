@@ -1,0 +1,9 @@
+FROM node::latest as build_image
+
+WORKDIR /app
+
+COPY ./CPM .
+
+RUN npm install
+RUN npm run build
+
