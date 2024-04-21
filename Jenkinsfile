@@ -27,8 +27,12 @@ agent any
 
                     docker stop build_container
                     docker stop cypress_container
-                    docker network rm our-net
                 '''
+            }
+        }
+        post{
+            always{
+                docker network rm our-net
             }
         }
 
