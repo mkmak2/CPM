@@ -23,10 +23,4 @@ agent any
             }
         }
     }
-    post{
-        always{
-            docker container rm build_container || docker stop build_container && docker container rm build_container
-            docker container rm cypress_container || docker stop cypress_container && docker container rm cypress_container
-        }
-    }
 }
