@@ -30,11 +30,5 @@ agent any
                 '''
             }
         }
-    }post{
-        always{
-            sh '''
-            docker network rm our-net
-            '''
-        }
     }
 }
