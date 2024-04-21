@@ -1,4 +1,4 @@
-FROM cypress/base:latest as build_image
+FROM cypress/included:latest as build_image
 
 WORKDIR /app
 
@@ -7,3 +7,4 @@ COPY . .
 RUN npm install
 RUN npm run build
 
+CMD npm run start
