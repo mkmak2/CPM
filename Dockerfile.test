@@ -1,3 +1,4 @@
-FROM build_image
+FROM build as test_image
 
-CMD ["npm start;npx cypress run"]
+
+RUN npx cypress run
