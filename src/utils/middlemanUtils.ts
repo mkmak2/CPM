@@ -15,32 +15,44 @@ export const calculateUnitMatrix = (customers:Customer[], suppliers:Supplier[])=
         }
     }
 
-    let DF = 0;
-    let OF = 0;
+    let DF:Supplier = {
+        name: "DF",
+        purchasePrice: 0,
+        supply: 0
+    }
+    let OF:Customer = {
+        name: "OF",
+        suppliers: {},
+        sellingPrice: 0,
+        demand: 0
+    };
 
     for(let i=0; i<customers.length; i++){
-        DF+=customers[i].demand;
+        DF.supply+=customers[i].demand;
+        console.log("DF: ", DF.supply);
     }
 
     for(let i=0; i<suppliers.length; i++){
-        OF+=suppliers[i].supply;
+        OF.demand+=suppliers[i].supply;
+        console.log("OF: " , OF.demand)
     }
 
-    let maxindex = [customers.length+1];
-    maxindex[customers.length] = 0;
-    for(let i=0; i<customers.length; i++){
+
+    customers.push(OF);
+    suppliers.push(DF);
+
+    let maxindex = [customers.length];
+    for(let i=0; i<customers.length; i++) {
         let max = customers[i].suppliers[suppliers[0].name];
-        maxindex[i]=0;
-        for(let j=0; j<suppliers.length;j++)
-        {
-            if(array[i][j]>max)
-            {
+        maxindex[i] = 0;
+        for (let j = 0; j < suppliers.length; j++) {
+            if (array[i][j] > max) {
                 console.log(j);
-                max=customers[i].suppliers[suppliers[j].name];
+                max = customers[i].suppliers[suppliers[j].name];
                 maxindex[i] = j;
             }
         }
-
+    }
         for(let i=0; i<customers.length; i++){
             for(let j=maxindex[i]; j<suppliers.length;j++)
             {
@@ -48,8 +60,9 @@ export const calculateUnitMatrix = (customers:Customer[], suppliers:Supplier[])=
                 if(customers[i].demand<=suppliers[j].supply)
                 {
                     array[i][j] = customers[i].demand;
-                    customers[i].demand-=array[i][j];
-                    suppliers[j].supply-=array[i][j];
+                    suppliers[j].supply-=customers[i].demand;
+                    customers[i].demand=0;
+
                     console.log("Odbiorca: ", i)
                     console.log("Odbiorca, popyt", i , " ", customers[i].demand);
                     console.log("Dostawca: ", j)
@@ -58,8 +71,8 @@ export const calculateUnitMatrix = (customers:Customer[], suppliers:Supplier[])=
                 }
                 else if (customers[i].demand>suppliers[j].supply)
                 {
-                    array[i][j] = customers[i].demand;
-                    customers[i].demand-=array[i][j];
+                    array[i][j] = suppliers[j].supply;
+                    customers[i].demand-=suppliers[j].supply;
                     suppliers[j].supply=0;
                     console.log("Odbiorca: ", i)
                     console.log("Odbiorca, popyt", i , " ", customers[i].demand);
@@ -68,9 +81,11 @@ export const calculateUnitMatrix = (customers:Customer[], suppliers:Supplier[])=
                 }
 
             }
+
+
         }
 
-    }
+
     console.log(array);
     return array;
 }
