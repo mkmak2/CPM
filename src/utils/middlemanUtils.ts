@@ -44,25 +44,33 @@ export const calculateUnitMatrix = (customers:Customer[], suppliers:Supplier[])=
         for(let i=0; i<customers.length; i++){
             for(let j=maxindex[i]; j<suppliers.length;j++)
             {
-                if(customers[i].demand<suppliers[j].supply)
+
+                if(customers[i].demand<=suppliers[j].supply)
                 {
                     array[i][j] = customers[i].demand;
+                    customers[i].demand-=array[i][j];
                     suppliers[j].supply-=array[i][j];
+                    console.log("Odbiorca: ", i)
+                    console.log("Odbiorca, popyt", i , " ", customers[i].demand);
+                    console.log("Dostawca: ", j)
+                    console.log("Dostawca, podaż: ", j, " ", suppliers[j].supply);
                     break;
                 }
                 else if (customers[i].demand>suppliers[j].supply)
                 {
                     array[i][j] = customers[i].demand;
+                    customers[i].demand-=array[i][j];
                     suppliers[j].supply=0;
+                    console.log("Odbiorca: ", i)
+                    console.log("Odbiorca, popyt", i , " ", customers[i].demand);
+                    console.log("Dostawca: ", j)
+                    console.log("Dostawca, podaż: ", j, " ", suppliers[j].supply);
                 }
-                console.log("Komórka", i , j)
-                console.log(suppliers[j].supply)
+
             }
         }
 
     }
-    console.log(maxindex)
     console.log(array);
-
     return array;
 }
