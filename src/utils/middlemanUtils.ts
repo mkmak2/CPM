@@ -1,6 +1,6 @@
-import {Customer, Supplier} from "../../types/types";
+import {Calculations, Customer, Supplier} from "../../types/types";
 
-export const calculateUnitMatrix = (customers:Customer[], suppliers:Supplier[])=>{
+export const calculateUnitMatrix = (tab:Calculations[][], customers:Customer[], suppliers:Supplier[])=>{
 
     let array: number[][] = Array.from({ length: customers.length+1 }, () =>
         Array.from({ length: suppliers.length +1 }, () => 0)
@@ -11,10 +11,11 @@ export const calculateUnitMatrix = (customers:Customer[], suppliers:Supplier[])=
         {
             array[i][j]=customers[i].sellingPrice - suppliers[j].purchasePrice - customers[i].suppliers[suppliers[j].name];
             customers[i].suppliers[suppliers[j].name] = customers[i].sellingPrice - suppliers[j].purchasePrice - customers[i].suppliers[suppliers[j].name];
+            tab[i][j].unitCost = array[i][j];
 
         }
     }
-
+    console.log(array);
     let DF:Supplier = {
         name: "DF",
         purchasePrice: 0,
@@ -29,12 +30,10 @@ export const calculateUnitMatrix = (customers:Customer[], suppliers:Supplier[])=
 
     for(let i=0; i<customers.length; i++){
         DF.supply+=customers[i].demand;
-        console.log("DF: ", DF.supply);
     }
 
     for(let i=0; i<suppliers.length; i++){
         OF.demand+=suppliers[i].supply;
-        console.log("OF: " , OF.demand)
     }
 
 
@@ -54,38 +53,35 @@ export const calculateUnitMatrix = (customers:Customer[], suppliers:Supplier[])=
         }
     }
         for(let i=0; i<customers.length; i++){
-            for(let j=maxindex[i]; j<suppliers.length;j++)
-            {
+            for(let j=maxindex[i]; j<suppliers.length;j++) {
+                if (suppliers[j].supply !== 0) {
+                    if (customers[i].demand <= suppliers[j].supply) {
+                        array[i][j] = customers[i].demand;
+                        suppliers[j].supply -= customers[i].demand;
+                        customers[i].demand = 0;
+                        tab[i][j].value = array[i][j];
+                        tab[i][j].x = false;
+                        break;
+                    } else if (customers[i].demand > suppliers[j].supply) {
+                        array[i][j] = suppliers[j].supply;
+                        customers[i].demand -= suppliers[j].supply;
+                        suppliers[j].supply = 0;
+                        tab[i][j].value = array[i][j];
+                        tab[i][j].x = false;
 
-                if(customers[i].demand<=suppliers[j].supply)
-                {
-                    array[i][j] = customers[i].demand;
-                    suppliers[j].supply-=customers[i].demand;
-                    customers[i].demand=0;
+                    }
 
-                    console.log("Odbiorca: ", i)
-                    console.log("Odbiorca, popyt", i , " ", customers[i].demand);
-                    console.log("Dostawca: ", j)
-                    console.log("Dostawca, podaż: ", j, " ", suppliers[j].supply);
-                    break;
-                }
-                else if (customers[i].demand>suppliers[j].supply)
-                {
-                    array[i][j] = suppliers[j].supply;
-                    customers[i].demand-=suppliers[j].supply;
-                    suppliers[j].supply=0;
-                    console.log("Odbiorca: ", i)
-                    console.log("Odbiorca, popyt", i , " ", customers[i].demand);
-                    console.log("Dostawca: ", j)
-                    console.log("Dostawca, podaż: ", j, " ", suppliers[j].supply);
                 }
 
             }
-
-
         }
 
 
     console.log(array);
+    console.log(tab);
     return array;
+}
+
+export const calculateCoefficients = (calculations:Calculations[][], customers:Customer[], suppliers:Supplier[]) =>{
+    
 }

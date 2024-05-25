@@ -35,3 +35,9 @@ export type Supplier = {
     purchasePrice:number;
 
 }
+
+export type Calculations = {
+    x:boolean;
+    unitCost :number;
+    value:number;
+}

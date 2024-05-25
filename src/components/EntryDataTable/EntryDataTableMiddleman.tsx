@@ -73,9 +73,9 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
         if (fieldname==="name")
             prev[index].name = e.target.value;
         else if (fieldname==="demand")
-            prev[index].demand = e.target.value;
+            prev[index].demand = parseFloat(e.target.value);
         else
-            prev[index].sellingPrice = e.target.value;
+            prev[index].sellingPrice = parseFloat(e.target.value);
 
         setCustomers(prev);
 
@@ -86,16 +86,16 @@ const EntryDataTableMiddleman = ({ customers, suppliers, setCustomers , setSuppl
         if (fieldname==="name")
             prev[index].name = e.target.value;
         else if (fieldname==="supply")
-            prev[index].supply = e.target.value;
+            prev[index].supply = parseFloat(e.target.value);
         else
-            prev[index].purchasePrice = e.target.value;
+            prev[index].purchasePrice = parseFloat(e.target.value);
 
         setSuppliers(prev);
 
     }
 
     const handleTransportCost = (e:any, customer:Customer, supplier:Supplier) =>{
-        customer.suppliers[supplier.name] = e.target.value;
+        customer.suppliers[supplier.name] = parseFloat(e.target.value);
     }
 
     const unitMatrixDisplay = customers.map(e => {

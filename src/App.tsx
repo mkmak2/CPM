@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Activity, Customer, Supplier, Task} from '../types/types'
+import {Activity, Calculations, Customer, Supplier, Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
 import {Box, Button, TextField} from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
@@ -227,7 +227,14 @@ function App() {
   }
 
   const calculate = () => {
-      calculateUnitMatrix(customers, suppliers);
+    let tab: Calculations[][] = Array.from({ length: customers.length + 1 }, () =>
+        Array.from({ length: suppliers.length + 1 }, () => ({
+          unitCost: 0,
+          x: true,
+          value: 0
+        }))
+    );
+      const array = calculateUnitMatrix(tab, customers, suppliers);
       setShowUnitMatrix(true);
       console.log(customers);
   }
