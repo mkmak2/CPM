@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from pulp import *
 
 app = Flask(__name__)
+CORS(app)  # Dodaj CORS do aplikacji Flask
 
 # Globalne zmienne do przechowywania danych
 data = {}

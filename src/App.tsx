@@ -185,10 +185,10 @@ function App() {
   }
 
   const handleCustomersNum = (e:any) =>{
-    setCustomersNum(e.target.value);
+    setCustomersNum(parseInt(e.target.value));
   }
   const handleSuppliersNum = (e:any) =>{
-    setSuppliersNum(e.target.value);
+    setSuppliersNum(parseInt(e.target.value));
   }
 
   const handleOnClick = () => {
@@ -305,7 +305,7 @@ function App() {
 
             <Button variant={"contained"} onClick={handleOnClick}>Potwierdź</Button>
             {showTablesMiddleman ?
-            <EntryDataTableMiddleman customers={customers!} suppliers={suppliers!} setCustomers={setCustomers} setSuppliers={setSuppliers} calculate={calculate} status={showUnitMatrix}></EntryDataTableMiddleman>
+            <EntryDataTableMiddleman customersNum={customersNum} suppliersNum={suppliersNum}></EntryDataTableMiddleman>
                 : <div></div>}
           </TabPanel>
       </TabContext>
