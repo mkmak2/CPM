@@ -31,6 +31,7 @@ type resultDataObject = {
     calkowity_zysk:number;
     macierz_zyskow_jednostkowych:{[key:string]:number};
     optymalne_transporty: {[key:string]:number}
+    calkowity_koszt_zakupu:number;
 
 }
 

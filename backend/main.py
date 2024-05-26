@@ -65,8 +65,12 @@ def get_results():
     total_transport_cost = sum(koszty_transportu[i][j] * x[i][j].varValue for i in range(liczba_dostawcow) for j in range(liczba_odbiorcow))
     results['calkowity_koszt_transportu'] = total_transport_cost
 
+    # Całkowity koszt zakupu
+    total_purchase_cost = sum(koszty_zakupu[i] * x[i][j].varValue for i in range(liczba_dostawcow) for j in range(liczba_odbiorcow))
+    results['calkowity_koszt_zakupu'] = total_purchase_cost
+
     # Całkowite koszty
-    total_cost = total_transport_cost + sum(koszty_zakupu[i] * x[i][j].varValue for i in range(liczba_dostawcow) for j in range(liczba_odbiorcow))
+    total_cost = total_transport_cost + total_purchase_cost
     results['calkowite_koszty'] = total_cost
 
     # Całkowity przychód

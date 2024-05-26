@@ -18,10 +18,11 @@ type Props = {
     calkowity_zysk:number;
     macierz_zyskow_jednostkowych:{[key:string]:number};
     optymalne_transporty: {[key:string]:number}
+    calkowity_koszt_zakupu: number;
 
 }
 
-const ResultsDataTableMiddleman = ({customers_num, suppliers_num, calkowite_koszty, calkowity_koszt_transportu, calkowity_przychod, calkowity_zysk, optymalne_transporty, macierz_zyskow_jednostkowych }: Props) => {
+const ResultsDataTableMiddleman = ({customers_num, suppliers_num, calkowite_koszty, calkowity_koszt_transportu, calkowity_przychod, calkowity_zysk, optymalne_transporty, macierz_zyskow_jednostkowych , calkowity_koszt_zakupu}: Props) => {
 
     const customersTable = Array.from({length: customers_num}, (v, i) => i)
     const suppliersTable = Array.from({length: suppliers_num}, (v, i) => i)
@@ -104,7 +105,7 @@ const ResultsDataTableMiddleman = ({customers_num, suppliers_num, calkowite_kosz
                     </TableBody>
                 </Table>
             </TableContainer>
-            <h2>Tabela wynikowa</h2>
+            <h2>Tabela kosztów</h2>
 
             <TableContainer
                 component={Paper}
@@ -113,24 +114,36 @@ const ResultsDataTableMiddleman = ({customers_num, suppliers_num, calkowite_kosz
 
                     <TableBody>
                         <TableRow>
-                            <TableCell>Całkowity koszt transportu</TableCell>
-                            <TableCell>{calkowity_koszt_transportu}</TableCell>
+                            <TableCell >Koszt transportu</TableCell>
+                            <TableCell align='center'>{calkowity_koszt_transportu}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Całkowite koszty</TableCell>
-                            <TableCell>{calkowite_koszty}</TableCell>
+                            <TableCell >Koszt zakupu</TableCell>
+                            <TableCell align='center'>{calkowity_koszt_zakupu}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Całkowity przychód</TableCell>
-                            <TableCell>{calkowity_przychod}</TableCell>
+                            <TableCell >Koszt całkowity</TableCell>
+                            <TableCell align='center'>{calkowite_koszty}</TableCell>
                         </TableRow>
-                            <TableCell sx={{backgroundColor: '#c8e6c9'}}>Całkowity zysk</TableCell>
-                            <TableCell sx={{backgroundColor: '#c8e6c9'}}>{calkowity_zysk}</TableCell>
-                        <TableRow>
 
-                        </TableRow>
                     </TableBody>
                 </Table>
+
+            </TableContainer >
+            <h2>Tabela zysków</h2>
+            <TableContainer component={Paper}>
+            <Table sx={{minWidth: 650}} aria-label="simple table">
+                <TableBody>
+                    <TableRow>
+                        <TableCell >Przychód całkowity</TableCell>
+                        <TableCell align='center'>{calkowity_przychod}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell  sx={{backgroundColor: '#c8e6c9'}}>Zysk pośrednika</TableCell>
+                        <TableCell align='center' sx={{backgroundColor: '#c8e6c9'}}>{calkowity_zysk}</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
             </TableContainer>
         </Box>
     );

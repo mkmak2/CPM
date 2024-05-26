@@ -26,6 +26,7 @@ function App() {
     calkowity_zysk:number;
     macierz_zyskow_jednostkowych:{[key:string]:number};
     optymalne_transporty: {[key:string]:number}
+    calkowity_koszt_zakupu:number;
 
   }
   const [data, setData] = useState<resultDataObject | null>(null);
@@ -317,6 +318,7 @@ function App() {
                 calkowity_zysk={data!.calkowity_zysk}
                 macierz_zyskow_jednostkowych={data!.macierz_zyskow_jednostkowych}
                 optymalne_transporty={data!.optymalne_transporty}
+                calkowity_koszt_zakupu={data!.calkowity_koszt_zakupu}
             ></ResultsDataTableMiddleman> : <div></div>}
 
           </TabPanel>
