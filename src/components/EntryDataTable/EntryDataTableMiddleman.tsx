@@ -11,6 +11,7 @@ import { Box, Tab,Button, TextField } from '@mui/material';
 interface Props {
     customersNum: number,
     suppliersNum: number
+    calc: (data: resultDataObject)=> void;
 }
 
 type initialDataObject = {
@@ -23,12 +24,22 @@ type initialDataObject = {
     koszty_transportu: Array<Array<number>>,
   }
 
-const EntryDataTableMiddleman = ({customersNum, suppliersNum}: Props) => {
+type resultDataObject = {
+    calkowite_koszty:number;
+    calkowity_koszt_transportu: number;
+    calkowity_przychod: number;
+    calkowity_zysk:number;
+    macierz_zyskow_jednostkowych:{[key:string]:number};
+    optymalne_transporty: {[key:string]:number}
+
+}
+
+const EntryDataTableMiddleman = ({customersNum, suppliersNum, calc}: Props) => {
 
     const customersTable = Array.from({length: customersNum}, (v, i) => i)
     const suppliersTable = Array.from({length: suppliersNum}, (v, i) => i)
 
-    const [data, setData] = useState<initialDataObject>()
+    const [data, setData] = useState<resultDataObject>()
     const [popyt, setPopyt] = useState<Array<number>>(Array(customersNum).fill(0))
     const [sprzedaz, setSprzedaz] = useState<Array<number>>(Array(customersNum).fill(0))
     const [podaz, setPodaz] = useState<Array<number>>(Array(suppliersNum).fill(0))
@@ -138,12 +149,26 @@ const EntryDataTableMiddleman = ({customersNum, suppliersNum}: Props) => {
         })
         console.log(res)
 
-        //funkcja z propsow
+          if(res.status==200)
+          {
+              const res2 = await fetch('http://localhost:5000/get_results', {
+                  method: 'GET',
+                  headers:{
+                      'Content-Type': 'application/json'
+                  },
+
+              })
+              const result= await res2.json();
+              setData(result)
+              calc(result);
+          }
+
       }
 
   return (
     <div>
         <Box marginBottom={5} width={800}>
+            <h2>Dane odbiorców</h2>
          <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -172,58 +197,60 @@ const EntryDataTableMiddleman = ({customersNum, suppliersNum}: Props) => {
         </Box>
 
         <Box marginBottom={5} width={800}>
+            <h2>Dane dostawców</h2>
             <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{minWidth: 650}} aria-label="simple table">
                     <TableHead>
-                    <TableRow>
-                        <TableCell>Nazwa Dostawcy</TableCell>
-                        <TableCell align="right">Podaz</TableCell>
-                        <TableCell align="right">Koszt zakupu</TableCell>
-                    </TableRow>
+                        <TableRow>
+                            <TableCell>Nazwa Dostawcy</TableCell>
+                            <TableCell align="right">Podaz</TableCell>
+                            <TableCell align="right">Koszt zakupu</TableCell>
+                        </TableRow>
                     </TableHead>
                     <TableBody>
-                    {secondTableRows.map((row) => (
-                        <TableRow
-                        key={row.name}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                        <TableCell component="th" scope="row">
-                            {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.popyt}</TableCell>
-                        <TableCell align="right">{row.cena}</TableCell>
-                        </TableRow>
-                    ))}
+                        {secondTableRows.map((row) => (
+                            <TableRow
+                                key={row.name}
+                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                            >
+                                <TableCell component="th" scope="row">
+                                    {row.name}
+                                </TableCell>
+                                <TableCell align="right">{row.popyt}</TableCell>
+                                <TableCell align="right">{row.cena}</TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>
         </Box>
 
         <Box marginBottom={5} width={800}>
+            <h2>Koszty transportu</h2>
             <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{minWidth: 650}} aria-label="simple table">
                     <TableHead>
-                    <TableRow>
-                        <TableCell></TableCell>
-                        {suppliersTable.map(s => (
-                            <TableCell align="center">Dostawca {s+1}</TableCell>
-                        ))}
-                    </TableRow>
+                        <TableRow>
+                            <TableCell></TableCell>
+                            {suppliersTable.map(s => (
+                                <TableCell align="center">Dostawca {s + 1}</TableCell>
+                            ))}
+                        </TableRow>
                     </TableHead>
                     <TableBody>
-                    {thirdTableRows.map((row) => (
-                        <TableRow
-                        key={row.name}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                        <TableCell component="th" scope="row">
-                            {row.name}
-                        </TableCell>
-                        {row.input.map(i => (
-                            <TableCell>{i}</TableCell>
+                        {thirdTableRows.map((row) => (
+                            <TableRow
+                                key={row.name}
+                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                            >
+                                <TableCell component="th" scope="row">
+                                    {row.name}
+                                </TableCell>
+                                {row.input.map(i => (
+                                    <TableCell>{i}</TableCell>
+                                ))}
+                            </TableRow>
                         ))}
-                        </TableRow>
-                    ))}
                     </TableBody>
                 </Table>
             </TableContainer>

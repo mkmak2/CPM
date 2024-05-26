@@ -1,28 +1,34 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import {Activity, Calculations, Customer, Supplier, Task} from '../types/types'
 import EntryDataTable from './components/EntryDataTable/EntryDataTable'
 import {Box, Button, TextField} from "@mui/material";
 import NewDataForm from "./components/NewDataForm/NewDataForm";
 import {
   calculateCritical,
-  calculateLF,
-  calculateLS,
-  calculateTaskEF,
-  calculateTaskES,
-  calculateTaskR, calculateTasks,
-  findStartActivity, graph,
+  calculateTasks,
+  findStartActivity,
+  graph,
   isDuplicate,
   setEdgesActivities
 } from './utils/utils'
 import ResultsDataTable from "./components/ResultsDataTable/ResultsDataTable";
-import ReactDOM from "react-dom/client";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import {TabContext, TabList, TabPanel} from "@mui/lab";
+import {TabContext, TabPanel} from "@mui/lab";
 import EntryDataTableMiddleman from "./components/EntryDataTable/EntryDataTableMiddleman";
-import {calculateUnitMatrix} from "./utils/middlemanUtils";
-function App() {
+import ResultsDataTableMiddleman from "./components/ResultsDataTable/ResultsDataTableMiddleman";
 
+function App() {
+  type resultDataObject = {
+    calkowite_koszty:number;
+    calkowity_koszt_transportu: number;
+    calkowity_przychod: number;
+    calkowity_zysk:number;
+    macierz_zyskow_jednostkowych:{[key:string]:number};
+    optymalne_transporty: {[key:string]:number}
+
+  }
+  const [data, setData] = useState<resultDataObject | null>(null);
   const [entryData, setEntryData] = useState<Task[]>()
   const [activity, setActivity] = useState<Activity[]>()
   const [showTable, setShowTable] = useState<boolean>(false)
@@ -32,7 +38,7 @@ function App() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [showTablesMiddleman, setShowTablesMiddleman] = useState<boolean>(false);
-  const [showUnitMatrix, setShowUnitMatrix] = useState<boolean>(false);
+  const [showResults, setShowResults] = useState<boolean>(false);
 
   const deleteStep = (id: string, endId: number) => {
     const updatedData = entryData!.filter(d => d.id !== id)
@@ -226,20 +232,14 @@ function App() {
     setShowTablesMiddleman(true);
   }
 
-  const calculate = () => {
-    let tab: Calculations[][] = Array.from({ length: customers.length + 1 }, () =>
-        Array.from({ length: suppliers.length + 1 }, () => ({
-          unitCost: 0,
-          x: true,
-          value: 0
-        }))
-    );
-      const array = calculateUnitMatrix(tab, customers, suppliers);
-      setShowUnitMatrix(true);
-      console.log(customers);
+  console.log(data);
+
+
+  const handleResults = (data:resultDataObject)=>{
+    setData(data);
+    setShowResults(true);
+    console.log(data);
   }
-
-
 
   const status = entryData ? findStartActivity(entryData) : false
   return (
@@ -305,8 +305,20 @@ function App() {
 
             <Button variant={"contained"} onClick={handleOnClick}>Potwierdź</Button>
             {showTablesMiddleman ?
-            <EntryDataTableMiddleman customersNum={customersNum} suppliersNum={suppliersNum}></EntryDataTableMiddleman>
+            <EntryDataTableMiddleman customersNum={customersNum} suppliersNum={suppliersNum} calc={handleResults}></EntryDataTableMiddleman>
                 : <div></div>}
+
+            {showResults ? <ResultsDataTableMiddleman
+                customers_num={customersNum}
+                suppliers_num={suppliersNum}
+                calkowite_koszty={data!.calkowite_koszty}
+                calkowity_koszt_transportu={data!.calkowity_koszt_transportu}
+                calkowity_przychod={data!.calkowity_przychod}
+                calkowity_zysk={data!.calkowity_zysk}
+                macierz_zyskow_jednostkowych={data!.macierz_zyskow_jednostkowych}
+                optymalne_transporty={data!.optymalne_transporty}
+            ></ResultsDataTableMiddleman> : <div></div>}
+
           </TabPanel>
       </TabContext>
 
