@@ -41,11 +41,12 @@ const EntryDataTableMiddleman = ({customersNum, suppliersNum, calc}: Props) => {
     const suppliersTable = Array.from({length: suppliersNum}, (v, i) => i)
 
     const [data, setData] = useState<resultDataObject>()
-    const [popyt, setPopyt] = useState<Array<number>>(Array(customersNum).fill(0))
-    const [sprzedaz, setSprzedaz] = useState<Array<number>>(Array(customersNum).fill(0))
-    const [podaz, setPodaz] = useState<Array<number>>(Array(suppliersNum).fill(0))
-    const [zakup, setZakup] = useState<Array<number>>(Array(suppliersNum).fill(0))
-    const [transport, setTransport] = useState<number[][]>(Array.from({ length: suppliersNum }, () => Array(customersNum).fill(0)))
+    const [popyt, setPopyt] = useState<Array<number>>()
+    const [sprzedaz, setSprzedaz] = useState<Array<number>>()
+    const [podaz, setPodaz] = useState<Array<number>>()
+    const [zakup, setZakup] = useState<Array<number>>()
+    const [transport, setTransport] = useState<number[][]>(Array.from({length: suppliersNum}, () => Array(customersNum).fill(0)))
+    const [error,setError] = useState<string>()
     
 
     function createData(
@@ -64,10 +65,67 @@ const EntryDataTableMiddleman = ({customersNum, suppliersNum, calc}: Props) => {
         return {name, input}
     }
 
+    const validation = () => {
+        let status = true
+        if(!popyt || !podaz || !sprzedaz || !zakup || !transport){
+            setError('Uzupelnij wszystkie pola dodanimi wartosciami')
+            return false
+        }
+        popyt.forEach(p => {
+            if(p < 0) {
+                setError('Uzupelnij wszystkie pola dodanimi wartosciami')
+                status =  false
+            }
+        })
+        podaz.forEach(p => {
+            if(p < 0) {
+                setError('Uzupelnij wszystkie pola dodanimi wartosciami')
+                status =  false
+            }
+        })
+        sprzedaz.forEach(p => {
+            if(p < 0) {
+                setError('Uzupelnij wszystkie pola dodanimi wartosciami')
+                status =  false
+            }
+        })
+        zakup.forEach(p => {
+            if(p < 0) {
+                setError('Uzupelnij wszystkie pola dodanimi wartosciami')
+                status =  false
+            }
+        })
+        if (transport.length !== suppliersNum) {
+            setError('Uzupelnij wszystkie pola dodanimi wartosciami')
+            status = false;
+          }
+
+          for (const row of transport) {
+            if (row.length !== customersNum) {
+                setError('Uzupelnij wszystkie pola dodanimi wartosciami')
+              status =  false;
+            }
+            for (const value of row) {
+              if (value <= 0) {
+                setError('Uzupelnij wszystkie pola dodanimi wartosciami')
+                status =  false;
+              }
+            }
+          }
+
+        if(!status)
+            return false
+        else {
+            setError('')
+            return true
+        }
+    } 
+
       const updatePopyt = (e: any, index: number) => {
-        const newArr = popyt ? [...popyt] : []
-        newArr[index] = parseInt(e.target.value)
-        setPopyt(newArr)
+            const newArr = popyt ? [...popyt] : []
+            newArr[index] = parseInt(e.target.value)
+            setPopyt(newArr)
+
       }
 
       const updateSprzedaz = (e: any, index: number) => {
@@ -97,23 +155,21 @@ const EntryDataTableMiddleman = ({customersNum, suppliersNum, calc}: Props) => {
 
       }
 
-      
-
       const firstTableRows = customersTable.map( c => (
         createData(
             `Odbiorca ${c + 1}`,
-            <TextField id="standard-basic" variant="standard" value={popyt[c]}
+            <TextField id="standard-basic" variant="standard" 
             onChange={(e) => updatePopyt(e, c) } />,
-            <TextField id="standard-basic" variant="standard" value={sprzedaz[c]}
+            <TextField id="standard-basic" variant="standard" 
                 onChange={(e) => updateSprzedaz(e,c)} />)
       ))
 
       const secondTableRows = suppliersTable.map( c => (
         createData(
             `Dostawca ${c + 1}`,
-            <TextField id="standard-basic" variant="standard" value={podaz[c]}
+            <TextField id="standard-basic" variant="standard" 
             onChange={(e) => updatePodaz(e, c) } />,
-            <TextField id="standard-basic" variant="standard" value={zakup[c]}
+            <TextField id="standard-basic" variant="standard" 
                 onChange={(e) => updateZakup(e,c)} />)
       ))
       
@@ -121,25 +177,27 @@ const EntryDataTableMiddleman = ({customersNum, suppliersNum, calc}: Props) => {
         createTransportData(
             `Odbiorca ${c + 1}`,
             suppliersTable.map( s => (
-                <TextField id="standard-basic" variant="standard" value={transport[s][c]}
+                <TextField id="standard-basic" variant="standard" 
                 onChange={(e) => updateTransport(e,s,c)} />
            ))
       )))
 
-      console.log(transport)
 
       const onSubmit = async () => {
-        const newData = {
+        if(!validation())
+            return 
+
+        const newData: initialDataObject = {
             liczba_dostawcow: suppliersNum,
             liczba_odbiorcow: customersNum,
-            maks_popyt: popyt,
-            maks_podaż: podaz,
-            koszty_zakupu: zakup,
-            ceny_sprzedaży: sprzedaz,
+            maks_popyt: popyt!,
+            maks_podaż: podaz!,
+            koszty_zakupu: zakup!,
+            ceny_sprzedaży: sprzedaz!,
             koszty_transportu: transport,
         }
 
-        console.log(newData)
+       
 
         const res = await fetch('http://localhost:5000/send_data', {
             method: 'POST',
@@ -148,7 +206,6 @@ const EntryDataTableMiddleman = ({customersNum, suppliersNum, calc}: Props) => {
             },
             body: JSON.stringify(newData)
         })
-        console.log(res)
 
           if(res.status==200)
           {
@@ -258,6 +315,9 @@ const EntryDataTableMiddleman = ({customersNum, suppliersNum, calc}: Props) => {
         </Box>
 
         <Button variant="contained" onClick={() => onSubmit()}>Wykonaj</Button>
+        <div>
+            <span>{error}</span>
+        </div>
  
     </div>
   )
