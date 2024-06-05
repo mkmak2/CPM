@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
-    "@types/cytoscape": "^3.19.16"
+    "@types/cytoscape": "^3.19.16",
+    "cypress": "^13.7.2"
   }
 }

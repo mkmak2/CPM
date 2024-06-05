@@ -1,0 +1,4 @@
+FROM build as test_image
+
+
+RUN npx cypress run
