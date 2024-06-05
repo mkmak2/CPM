@@ -18,7 +18,7 @@ const ResultsDataTable = ({ data }: Props) => {
         <TableRow
             key={e.id}
             sx={{ "&:last-child td, &:last-child th": { border: 0 },
-            backgroundColor: e.R === 0? "#c8e6c9" : "inherit",
+                backgroundColor: e.R === 0? "#c8e6c9" : "inherit",
             }}
         >
             <TableCell component="th" scope="row" align="center">
